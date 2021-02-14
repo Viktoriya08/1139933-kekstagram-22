@@ -1,51 +1,3 @@
-/**
- * Получение случайного числа из интервала
- * @param {number} min - минимальное число интервала
- * @param {number} max - максимальное число интервала
- * @return {number} - случайное число
- */
-const getRandomIntInclusive = function (min, max) {
-  const minValid = (min < 0) ? 0 : Math.ceil(min);
-  const maxValid = (max < 0) ? 0 : Math.floor(max);
-  if (maxValid <= minValid) {
-    console.log('Ошибка передаваемых параметров');
-    return;
-  }
-  const randomNumber = Math.random() * (maxValid - minValid + 1);
-  return Math.floor(randomNumber) + minValid;
-}
-
-/**
- * @param {sting} line - исходная строка
- * @param {number} long - максимальное количетсво символов
- * @return {boolean} - истина, если допустимое количесвто символов
- */
-const checkCommentLength = function (line, long) {
-  return line.length < long;
-}
-
-
-/**
- * @param {object} photos - объект массива - фото пользователя. Состоит из:
- *
- *   @param {number} id - число — идентификатор описания. Это число от 1 до 25. Идентификаторы не должны повторяться.
- *   @param {string} url - строка — адрес картинки вида photos/{{i}}.jpg, где {{i}} — это число от 1 до 25. Адреса картинок не должны повторяться.
- *   @param {string} description - строка — описание фотографии. Описание придумайте самостоятельно.
- *   @param {number} likes число — количество лайков, поставленных фотографии. Случайное число от 15 до 200.
- *   @param {Array} comments -  массив объектов — список комментариев, оставленных другими пользователями к этой фотографии. Сосит из:
- *      @param {number} id - случайное число
- *      @param {string} avatar - это строка, значение которой формируется по правилу img/avatar-{{случайное число от 1 до 6}}.svg.
- *      @param {string} message - Всё отлично!
-                                В целом всё неплохо. Но не всё.
-                                Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.
-                                Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.
-                                Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.
-                                Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!
-      @param {string} name - Имена авторов также должны быть случайными. Набор имён для комментаторов составьте сами.
-
- * @return {Array} - массива из 25 сгенерированных объектов.
- */
-
 const DESCRIPTION_PHOTOS = [
   'Сидим с котиком',
   'Играю с котиком',
@@ -66,6 +18,38 @@ const MESSAGES = [
 
 const NAMES = ['Ольга', 'Николай', 'Валентина', 'Илья', 'София', 'Мария']
 
+/**
+ * Получение случайного числа из интервала
+ * @param {number} min - минимальное число интервала
+ * @param {number} max - максимальное число интервала
+ * @return {number} - случайное число
+ */
+const getRandomIntInclusive = function (min, max) {
+  const minValid = (min < 0) ? 0 : Math.ceil(min);
+  const maxValid = (max < 0) ? 0 : Math.floor(max);
+  if (maxValid <= minValid) {
+    console.log('Ошибка передаваемых параметров');
+    return;
+  }
+  const randomNumber = Math.random() * (maxValid - minValid + 1);
+  return Math.floor(randomNumber) + minValid;
+}
+
+/**
+ * Проверяем длинну комментрия на допустимое число
+ * @param {sting} line - исходная строка
+ * @param {number} long - максимальное количетсво символов
+ * @return {boolean} - истина, если допустимое количесвто символов
+ */
+const checkCommentLength = function (line, long) {
+  return line.length < long;
+}
+
+/**
+ * Получаем уникалный номер id
+ * @param {number} count - случайное число
+ * @return {object} - объект уникальных id
+ */
 const getUnicIds = (count) => {
   const maxElement = count > 1 ? count - 1 : count;
   const ids = [];
@@ -85,33 +69,32 @@ const getUnicIds = (count) => {
 }
 
 /**
+ * Функция генерирует случайный элемент массива
+ * @param {Array} elements - массив
+ * @return {string} -  случайный елемент из массива
+ */
+const getRandomArrayElement = (elements) => {
+  return elements[getRandomIntInclusive(0, elements.length - 1)];
+};
+
+/**
+ * Функция генерирует объект комментарий
  * @param {number} id - случ число
- * @param {sting} avatar - img/avatar-{{случайное число от 1 до 6}}.svg.
- * @param {sting} message - случайное сообщение
- * @param {sting} name - случайное имя
- * @return {object} - собрать объект случайного комментария
+ * @return {object} -  объект — комментария, оставленных другими пользователями к этой фотографии.
  */
 const createComment = (id) => {
   return {
     id: id,
     avatar: 'img/avatar-' + id + '.svg',
-    message: MESSAGES[id],
-    name: NAMES[getRandomIntInclusive(0, NAMES.length - 1)],
+    message: getRandomArrayElement(MESSAGES),
+    name: getRandomArrayElement(NAMES),
   };
 };
 
 /**
- *  @param {number} id - случайное число
- *  @param {string} avatar - это строка, значение которой формируется по правилу img/avatar-{{случайное число от 1 до 6}}.svg.
- *  @param {string} message - Всё отлично!
-                                В целом всё неплохо. Но не всё.
-                                Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.
-                                Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.
-                                Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.
-                                Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!
-    @param {string} name - Имена авторов также должны быть случайными. Набор имён для комментаторов составьте сами.
-
- *  @return {Array} comments -  массив объектов — список комментариев, оставленных другими пользователями к этой фотографии.
+ * Функция генерации одного фото пользователя
+ * @param {number} id - число — идентификатор описания. Это число от 1 до 25. Идентификаторы не должны повторяться.
+ * @return {object} - объект.
  */
 const createPhoto = (id) => {
   const countComments = 6;
@@ -125,6 +108,10 @@ const createPhoto = (id) => {
   };
 };
 
+/**
+ * Функция генерации массива фото пользователей
+ * @param {object} - объект фото пользователя
+ * @return {Array} - массив из фото
+ */
 const photos = getUnicIds(25).map((value) => createPhoto(value))
 
-console.log(photos);
