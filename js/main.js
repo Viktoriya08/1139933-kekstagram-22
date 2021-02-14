@@ -102,7 +102,7 @@ const createPhoto = (id) => {
   return {
     id: id,
     url: 'photos/' + id + '.jpg',
-    description: DESCRIPTION_PHOTOS[getRandomIntInclusive(0, DESCRIPTION_PHOTOS.length - 1)],
+    description: getRandomArrayElement(DESCRIPTION_PHOTOS),
     likes: getRandomIntInclusive(15, 200),
     comments: commentsList,
   };
