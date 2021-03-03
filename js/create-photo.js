@@ -85,9 +85,11 @@ const createPhoto = (id) => {
 
 /**
  * Функция генерации массива фото пользователей
- * @param {object} - объект фото пользователя
+ * @param {number} count - количество фото для генерации
  * @return {Array} - массив из фото
  */
-const photos = getUnicIds(25).map((value) => createPhoto(value))
+const createPhotos = (count) => {
+  return getUnicIds(count).map((id) => createPhoto(id))
+}
 
-export {photos};
+export {createPhotos};
