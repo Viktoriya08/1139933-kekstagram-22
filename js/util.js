@@ -25,4 +25,20 @@ const checkCommentLength = function (line, long) {
   return line.length < long;
 }
 
-export {getRandomIntInclusive};
+/**
+ * Проверка нажатой клавиши Esc
+ * @param {boolean} evt - истина, если нажата клавиша Esc или Escape
+ */
+const isEscEvent = (evt) => {
+  return evt.key === 'Escape' || evt.key === 'Esc';
+};
+
+/**
+ * Проверка нажатой клавиши Enter
+ * @param {boolean} evt - истина, если нажата клавиша Enter
+ */
+const isEnterEvent = (evt) => {
+  return evt.key === 'Enter';
+};
+
+export {getRandomIntInclusive, isEscEvent, isEnterEvent};
