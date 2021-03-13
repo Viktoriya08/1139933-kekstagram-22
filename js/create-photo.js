@@ -26,15 +26,15 @@ const NAMES = ['Ольга', 'Николай', 'Валентина', 'Илья',
  * @return {object} - объект уникальных id
  */
 const getUnicIds = (count) => {
-  const maxElement = count > 1 ? count - 1 : count;
+  const maxElement = count;
   const ids = [];
-  let id = getRandomIntInclusive(0, maxElement);
+  let id = getRandomIntInclusive(1, maxElement);
 
   while(ids.length !== count) {
     const isNotUnicId = ids.some((value) => value === id);
 
     if (isNotUnicId) {
-      id = getRandomIntInclusive(0, maxElement);
+      id = getRandomIntInclusive(1, maxElement);
     } else {
       ids.push(id);
     }
