@@ -41,4 +41,4 @@ const isEnterEvent = (evt) => {
   return evt.key === 'Enter';
 };
 
-export {getRandomIntInclusive, isEscEvent, isEnterEvent};
+export {getRandomIntInclusive, isEscEvent, isEnterEvent, checkCommentLength};
