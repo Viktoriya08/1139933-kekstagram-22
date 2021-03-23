@@ -1,4 +1,5 @@
 import {isEscEvent} from './util.js';
+import { onValidateComment, onValidateTag } from './form-upload-photo.js';
 
 const DEFAULT_SCALE = 100;
 
@@ -9,18 +10,35 @@ const MARVIN_EFFECT = 'marvin';
 const PHOBOS_EFFECT = 'phobos';
 const HEAT_EFFECT = 'heat';
 
+const MAX_VALUE_PHOTO = 100;
+const MIN_VALUE_PHOTO = 25;
+const STEP = 25;
+
 const uploadInput = document.querySelector('#upload-file');
 const upLoadCancel = document.querySelector('#upload-cancel');
 const selectedEffect = document.querySelector('input[name=effect]:checked').value;
+const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+const scaleControlBigger = document.querySelector('.scale__control--bigger');
+const scaleControlValue = document.querySelector('.scale__control--value');
+const imgUploadPreview = document.querySelector('.img-upload__preview');
+const photo = document.querySelector('.img-upload__preview img');
+const radioButtons = document.querySelector('.effects__list');
+const photoElement = document.querySelector('.img-upload__preview img');
+
+// ===================== проверка формы
+const hashTagsUpload = document.querySelector('.text__hashtags');
+const textDescription = document.querySelector('.text__description');
 
 /**
  * Загрузка фото
  */
 const uploadPhoto = () =>{
+  // он всегда должен висеть на документе для открытия модального окна
   uploadInput.addEventListener('change', () => {
     showImgUploadOverlay();
     changeSizePhoto();
     changeEffect();
+    validateForm();
 
     document.addEventListener('keydown', onUploadPhotoEscKeydown);
     upLoadCancel.addEventListener('click', closeUploadPhoto);
@@ -41,7 +59,9 @@ const showImgUploadOverlay = () => {
  */
 const onUploadPhotoEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
-    closeUploadPhoto();
+    if (!evt.target.classList.contains('text__hashtags') && !evt.target.classList.contains('text__description')) {
+      closeUploadPhoto();
+    }
   }
 };
 
@@ -76,11 +96,15 @@ const destroyUploadPhoto = () => {
   document.removeEventListener('keydown', onUploadPhotoEscKeydown);
   upLoadCancel.removeEventListener('click', closeUploadPhoto);
 
-  const scaleControlSmaller = document.querySelector('.scale__control--smaller');
-  const scaleControlBigger = document.querySelector('.scale__control--bigger');
+  /*  const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+  const scaleControlBigger = document.querySelector('.scale__control--bigger'); */
 
   scaleControlSmaller.removeEventListener('click', onScaleControlSmaller);
   scaleControlBigger.removeEventListener('click', onScaleControlBigger);
+
+  radioButtons.removeEventListener('change', onChangeEffect);
+
+  destroyValideteForm();
 }
 
 /**
@@ -96,8 +120,8 @@ const clearUploadInput = () => {
 const changeSizePhoto = () => {
   setDefaultScale();
 
-  const scaleControlSmaller = document.querySelector('.scale__control--smaller');
-  const scaleControlBigger = document.querySelector('.scale__control--bigger');
+  /*   const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+  const scaleControlBigger = document.querySelector('.scale__control--bigger'); */
 
   scaleControlSmaller.addEventListener('click', onScaleControlSmaller);
   scaleControlBigger.addEventListener('click', onScaleControlBigger);
@@ -115,8 +139,8 @@ const setDefaultScale = () => {
  * Обработчик уменьшиния размера фотографии
  */
 const onScaleControlSmaller = () => {
-  const scaleControlValue = document.querySelector('.scale__control--value');
-  const imgUploadPreview = document.querySelector('.img-upload__preview');
+/*   const scaleControlValue = document.querySelector('.scale__control--value');
+  const imgUploadPreview = document.querySelector('.img-upload__preview'); */
 
   const scale = updateScale(percentageToNumber(scaleControlValue.value), false);
 
@@ -128,8 +152,8 @@ const onScaleControlSmaller = () => {
  * Обработчик увеличения размера фотографии
  */
 const onScaleControlBigger = () => {
-  const scaleControlValue = document.querySelector('.scale__control--value');
-  const imgUploadPreview = document.querySelector('.img-upload__preview');
+/*   const scaleControlValue = document.querySelector('.scale__control--value');
+  const imgUploadPreview = document.querySelector('.img-upload__preview'); */
 
   const scale = updateScale(percentageToNumber(scaleControlValue.value), true);
 
@@ -138,19 +162,16 @@ const onScaleControlBigger = () => {
 }
 
 /**
- * Изменение размера
+ * Изменение размера фото
  * @param {number} currentValue - текущее значение размера
  * @param {boolean} isSum - флаг, отвечающий за сложение или вычитание шага
  */
 const updateScale = (currentValue, isSum) => {
-  const maxValue = 100;
-  const minValue = 25;
-  const step = 25;
   const result = isSum
-    ? currentValue + step
-    : currentValue - step;
+    ? currentValue + STEP
+    : currentValue - STEP;
 
-  if (result < minValue || result > maxValue) {
+  if (result < MIN_VALUE_PHOTO|| result > MAX_VALUE_PHOTO) {
     return currentValue;
   }
 
@@ -282,24 +303,27 @@ const sliderOptionDefault = () => {
   }
 }
 
+const onChangeEffect = (evt) => {
+  changeEffectValue();
+  clearEffectValue();
+  /* const photo = document.querySelector('.img-upload__preview img'); */
+  photo.className = `effects__preview--${evt.target.value}`;
+
+  if (selectedEffect === EMPTY_EFFECT) {
+    document.querySelector('.img-upload__effect-level').classList.add('hidden');
+  } else {
+    document.querySelector('.img-upload__effect-level').classList.remove('hidden')
+  }
+};
+
 /**
  * Изменить эффект фото
  */
 const changeEffect = () => {
-  const photo = document.querySelector('.img-upload__preview img');
-  const radioButtons = document.querySelector('.effects__list');
+  /* const photo = document.querySelector('.img-upload__preview img'); */
+  /* const radioButtons = document.querySelector('.effects__list'); */
 
-  radioButtons.addEventListener('change', (event) => {
-    changeEffectValue();
-    clearEffectValue();
-    photo.className = `effects__preview--${event.target.value}`;
-
-    if (selectedEffect === 'none') {
-      document.querySelector('.img-upload__effect-level').classList.add('hidden');
-    } else {
-      document.querySelector('.img-upload__effect-level').classList.remove('hidden')
-    }
-  });
+  radioButtons.addEventListener('change', onChangeEffect);
 }
 
 /**
@@ -325,7 +349,7 @@ const clearEffectValue = () => {
 }
 
 /**
- * Устанговить эффект по типу
+ * Установить эффект по типу
  * @param {string} type - тип эффекта
  * @param {number} value - величина эффекта
  */
@@ -358,28 +382,42 @@ const setEffectValueByType = (value) => {
  * @param {*} value
  */
 const setChromeEffect = (value) => {
-  const photoElement = document.querySelector('.img-upload__preview img');
+  /* const photoElement = document.querySelector('.img-upload__preview img'); */
   photoElement.style.filter = `grayscale(${value})`;
 }
 
 const setSepiaEffect = (value) => {
-  const photoElement = document.querySelector('.img-upload__preview img');
+  /* const photoElement = document.querySelector('.img-upload__preview img'); */
   photoElement.style.filter = `sepia(${value})`;
 }
 
 const setMarvinEffect = (value) => {
-  const photoElement = document.querySelector('.img-upload__preview img');
+  /* const photoElement = document.querySelector('.img-upload__preview img'); */
   photoElement.style.filter = `invert(${value}%)`;
 }
 
 const setPhobosEffect = (value) => {
-  const photoElement = document.querySelector('.img-upload__preview img');
+  /* const photoElement = document.querySelector('.img-upload__preview img'); */
   photoElement.style.filter = `blur(${value}px)`;
 }
 
 const setHeatEffect = (value) => {
   const photoElement = document.querySelector('.img-upload__preview img');
   photoElement.style.filter = `brightness(${value})`;
+}
+
+// ===================== проверка формы
+/* const hashTagsUpload = document.querySelector('.text__hashtags');
+const textDescription = document.querySelector('.text__description'); */
+
+const validateForm = () => {
+  textDescription.addEventListener('input', onValidateComment);
+  hashTagsUpload.addEventListener('input', onValidateTag);
+}
+
+const destroyValideteForm = () => {
+  textDescription.removeEventListener('input', onValidateComment);
+  hashTagsUpload.removeEventListener('input', onValidateTag);
 }
 
 export{uploadPhoto};
