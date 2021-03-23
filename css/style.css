@@ -1343,6 +1343,19 @@ main {
           transform: translateX(-50%);
 }
 
+/* Модальное окно ошибки загрузки данных
+   ========================================================================== */
+.error-allupload__message {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  align-items: center;
+}
+
+.error-allupload__text {
+  padding: 50px;
+  background: #ff4e4e;
+}
 
 /* Адаптивности чуток
    ========================================================================== */

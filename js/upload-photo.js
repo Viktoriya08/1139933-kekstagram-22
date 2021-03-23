@@ -1,5 +1,6 @@
 import {isEscEvent} from './util.js';
 import { onValidateComment, onValidateTag } from './form-upload-photo.js';
+import { onSubmitEvent } from './send-photo.js';
 
 const DEFAULT_SCALE = 100;
 
@@ -29,6 +30,9 @@ const photoElement = document.querySelector('.img-upload__preview img');
 const hashTagsUpload = document.querySelector('.text__hashtags');
 const textDescription = document.querySelector('.text__description');
 
+// ===== отправка фото
+const sendPhotoForm = document.querySelector('#upload-select-image');
+
 /**
  * Загрузка фото
  */
@@ -39,6 +43,7 @@ const uploadPhoto = () =>{
     changeSizePhoto();
     changeEffect();
     validateForm();
+    sendPhoto();
 
     document.addEventListener('keydown', onUploadPhotoEscKeydown);
     upLoadCancel.addEventListener('click', closeUploadPhoto);
@@ -105,6 +110,7 @@ const destroyUploadPhoto = () => {
   radioButtons.removeEventListener('change', onChangeEffect);
 
   destroyValideteForm();
+  destroySendPhoto();
 }
 
 /**
@@ -139,9 +145,6 @@ const setDefaultScale = () => {
  * Обработчик уменьшиния размера фотографии
  */
 const onScaleControlSmaller = () => {
-/*   const scaleControlValue = document.querySelector('.scale__control--value');
-  const imgUploadPreview = document.querySelector('.img-upload__preview'); */
-
   const scale = updateScale(percentageToNumber(scaleControlValue.value), false);
 
   scaleControlValue.value = getPercentage(scale);
@@ -152,9 +155,6 @@ const onScaleControlSmaller = () => {
  * Обработчик увеличения размера фотографии
  */
 const onScaleControlBigger = () => {
-/*   const scaleControlValue = document.querySelector('.scale__control--value');
-  const imgUploadPreview = document.querySelector('.img-upload__preview'); */
-
   const scale = updateScale(percentageToNumber(scaleControlValue.value), true);
 
   scaleControlValue.value = getPercentage(scale);
@@ -320,9 +320,6 @@ const onChangeEffect = (evt) => {
  * Изменить эффект фото
  */
 const changeEffect = () => {
-  /* const photo = document.querySelector('.img-upload__preview img'); */
-  /* const radioButtons = document.querySelector('.effects__list'); */
-
   radioButtons.addEventListener('change', onChangeEffect);
 }
 
@@ -382,22 +379,18 @@ const setEffectValueByType = (value) => {
  * @param {*} value
  */
 const setChromeEffect = (value) => {
-  /* const photoElement = document.querySelector('.img-upload__preview img'); */
   photoElement.style.filter = `grayscale(${value})`;
 }
 
 const setSepiaEffect = (value) => {
-  /* const photoElement = document.querySelector('.img-upload__preview img'); */
   photoElement.style.filter = `sepia(${value})`;
 }
 
 const setMarvinEffect = (value) => {
-  /* const photoElement = document.querySelector('.img-upload__preview img'); */
   photoElement.style.filter = `invert(${value}%)`;
 }
 
 const setPhobosEffect = (value) => {
-  /* const photoElement = document.querySelector('.img-upload__preview img'); */
   photoElement.style.filter = `blur(${value}px)`;
 }
 
@@ -407,9 +400,6 @@ const setHeatEffect = (value) => {
 }
 
 // ===================== проверка формы
-/* const hashTagsUpload = document.querySelector('.text__hashtags');
-const textDescription = document.querySelector('.text__description'); */
-
 const validateForm = () => {
   textDescription.addEventListener('input', onValidateComment);
   hashTagsUpload.addEventListener('input', onValidateTag);
@@ -418,6 +408,15 @@ const validateForm = () => {
 const destroyValideteForm = () => {
   textDescription.removeEventListener('input', onValidateComment);
   hashTagsUpload.removeEventListener('input', onValidateTag);
+}
+
+////// загрузка фотографии
+const sendPhoto = () => {
+  sendPhotoForm.addEventListener('submit', onSubmitEvent);
+}
+
+const destroySendPhoto = () => {
+  sendPhotoForm.removeEventListener('submit', onSubmitEvent)
 }
 
 export{uploadPhoto};
