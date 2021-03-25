@@ -1429,3 +1429,7 @@ main {
 .hidden {
   display: none;
 }
+
+.text__hashtags:invalid {
+  border: 2px solid red;
+}

@@ -10,7 +10,7 @@ const fetchPhoto = async () => {
 
     return photos.map(photo => transformResponseToPhoto(photo));
   } catch (error) {
-    console.log(error);
+    return error;
   }
 
   // для имитации ошибки
