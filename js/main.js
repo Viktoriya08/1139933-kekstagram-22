@@ -1,8 +1,13 @@
-import {createPhotos} from './create-photo.js';
-import {showPhotos} from './show-photos.js';
-import {uploadPhoto} from './upload-photo.js';
+import { showPhotos } from './show-photos.js';
+import { uploadPhoto } from './upload-photo.js';
+import { fetchPhoto } from './fetch-photo.js';
+import { errorHandlerModal } from './notification/error-handler.js';
 
-const COUNT_PHOTOS = 25;
-const photosData = createPhotos(COUNT_PHOTOS);
-showPhotos(photosData);
-uploadPhoto();
+fetchPhoto()
+  .then(photos => {
+    showPhotos(photos);
+    uploadPhoto();
+  })
+  .catch(() => {
+    errorHandlerModal();
+  })
