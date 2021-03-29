@@ -3,6 +3,7 @@ import {openBigPhoto} from './open-big-photo.js';
 import { getUniqueIds } from './util.js';
 
 const DELAY_PHOTO_RENDER = 500;
+const RANDOM_PHOTO = 10;
 
 const photosContainer = document.querySelector('.pictures');
 const userPhotoTemplate = document.querySelector('#picture').content;
@@ -69,7 +70,7 @@ const toggleActiveFilterControl = (e) => {
  * Получить случайные фотографии
  */
 const getRandomPhotos = (photos) => {
-  return getUniqueIds(10).map((id) => photos[id - 1])
+  return getUniqueIds(RANDOM_PHOTO).map((id) => photos[id - 1])
 }
 
 /**
