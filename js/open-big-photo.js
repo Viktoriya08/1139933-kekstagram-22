@@ -125,7 +125,7 @@ const closeBigPhoto = () => {
  */
 
 const showComment = (comments, commentsContainer) => {
-  commentsContainer.innerHTML = "";
+  commentsContainer.innerHTML = '';
   const userCommentTemplate = document.querySelector('#social__comments').content;
   const userCommentFragment = document.createDocumentFragment();
   comments.forEach((comment, index) => {

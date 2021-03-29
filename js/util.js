@@ -8,7 +8,6 @@ const getRandomIntInclusive = function (min, max) {
   const minValid = (min < 0) ? 0 : Math.ceil(min);
   const maxValid = (max < 0) ? 0 : Math.floor(max);
   if (maxValid <= minValid) {
-    console.log('Ошибка передаваемых параметров');
     return;
   }
   const randomNumber = Math.random() * (maxValid - minValid + 1);
