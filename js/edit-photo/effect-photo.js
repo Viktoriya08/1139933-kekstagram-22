@@ -30,15 +30,22 @@ const destroyChangeEffect = () => {
 const onChangeEffect = (evt) => {
   changeEffectValue();
   clearEffectValue();
-  const selectedEffect = document.querySelector('input[name=effect]:checked').value;
   photoElement.className = `effects__preview--${evt.target.value}`;
+  toggleEffectLevelBackBySelectedEffect();
+};
+
+/**
+ * Скрыть подложку регулятора уровня эффекта
+ */
+const toggleEffectLevelBackBySelectedEffect = () => {
+  const selectedEffect = document.querySelector('input[name=effect]:checked').value;
 
   if (selectedEffect === EMPTY_EFFECT) {
     document.querySelector('.img-upload__effect-level').classList.add('hidden');
   } else {
     document.querySelector('.img-upload__effect-level').classList.remove('hidden')
   }
-};
+}
 
 /**
  * Изменить значение эффекта
@@ -244,4 +251,4 @@ const sliderOptionDefault = () => {
 }
 
 
-export { changeEffect, clearEffectValue, radioButtons, destroyChangeEffect, destroyUISlider, clearEffect }
+export { changeEffect, clearEffectValue, radioButtons, destroyChangeEffect, destroyUISlider, clearEffect, toggleEffectLevelBackBySelectedEffect }

@@ -41,4 +41,27 @@ const isEnterEvent = (evt) => {
   return evt.key === 'Enter';
 };
 
-export {getRandomIntInclusive, isEscEvent, isEnterEvent, checkCommentLength};
+/**
+ * Получаем уникальный номер id
+ * @param {number} count - случайное число
+ * @return {object} - объект уникальных id
+ */
+const getUniqueIds = (count) => {
+  const maxElement = count;
+  const ids = [];
+  let id = getRandomIntInclusive(1, maxElement);
+
+  while(ids.length !== count) {
+    const isNotUniqueId = ids.some((value) => value === id);
+
+    if (isNotUniqueId) {
+      id = getRandomIntInclusive(1, maxElement);
+    } else {
+      ids.push(id);
+    }
+
+  }
+  return ids;
+}
+
+export {getRandomIntInclusive, isEscEvent, isEnterEvent, checkCommentLength, getUniqueIds};

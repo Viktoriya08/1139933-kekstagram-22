@@ -1,8 +1,8 @@
 import { isEscEvent } from './util.js';
 import { clearTags, clearDescription, validateForm, destroyValidateForm } from './form-upload-photo.js';
 import { postPhoto } from './send-photo.js';
-import { changeEffect, clearEffectValue, destroyChangeEffect, destroyUISlider, clearEffect } from './edit-photo/effect-photo.js';
-import { changeSizePhoto, destroyChangeSizePhoto } from './edit-photo/scale-photo.js';
+import { changeEffect, clearEffectValue, destroyChangeEffect, destroyUISlider, clearEffect, toggleEffectLevelBackBySelectedEffect } from './edit-photo/effect-photo.js';
+import { changeSizePhoto, destroyChangeSizePhoto, clearScale } from './edit-photo/scale-photo.js';
 import { showSuccessMessage } from './notification/success-handler.js';
 import { showErrorMessage } from './notification/error-handler.js';
 
@@ -15,6 +15,7 @@ const upLoadCancel = document.querySelector('#upload-cancel');
 const uploadPhoto = () => {
   // он всегда должен висеть на документе для открытия модального окна
   uploadInput.addEventListener('change', () => {
+    toggleEffectLevelBackBySelectedEffect();
     showImgUploadOverlay();
     changeSizePhoto();
     changeEffect();
@@ -62,6 +63,7 @@ const closeUploadPhoto = () => {
   clearUploadInput();
   clearDescription();
   clearTags();
+  clearScale();
   destroyUploadPhoto();
 };
 

@@ -70,6 +70,14 @@ const updateScale = (currentValue, isSum) => {
 }
 
 /**
+ * Очистить масштабирование
+ */
+const clearScale = () => {
+  setDefaultScale();
+  imgUploadPreview.style.transform = '';
+}
+
+/**
  * Получение процентов
  * @param {number} value - значение
  */
@@ -85,4 +93,4 @@ const percentageToNumber = (percent) => {
   return Number(percent.replace('%', ''));
 }
 
-export { changeSizePhoto, destroyChangeSizePhoto }
+export { changeSizePhoto, destroyChangeSizePhoto, clearScale }
