@@ -20,7 +20,7 @@ const onPopupEscKeydown = (evt) => {
  * Функция открытия большого фото
  * @param {string} url - ссылка на фотографию
  * @param {string} comments- список комментариев
- * @param {number} likes- кол-во лайков
+ * @param {number} likes- количество лайков
  */
 const openBigPhoto = (url, comments, likes, description) => {
   bigPhotoContainer.classList.remove('hidden');
