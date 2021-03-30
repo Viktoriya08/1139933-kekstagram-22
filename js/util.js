@@ -4,7 +4,7 @@
  * @param {number} max - максимальное число интервала
  * @return {number} - случайное число
  */
-const getRandomIntInclusive = function (min, max) {
+const getRandomIntInclusive = (min, max) => {
   const minValid = (min < 0) ? 0 : Math.ceil(min);
   const maxValid = (max < 0) ? 0 : Math.floor(max);
   if (maxValid <= minValid) {
@@ -15,12 +15,12 @@ const getRandomIntInclusive = function (min, max) {
 }
 
 /**
- * Проверяем длинну комментрия на допустимое число
- * @param {sting} line - исходная строка
- * @param {number} long - максимальное количетсво символов
- * @return {boolean} - истина, если допустимое количесвто символов
+ * Проверяем длину комментария на допустимое число
+ * @param {string} line - исходная строка
+ * @param {number} long - максимальное количество символов
+ * @return {boolean} - истина, если допустимое количество символов
  */
-const checkCommentLength = function (line, long) {
+const checkCommentLength = (line, long) => {
   return line.length < long;
 }
 

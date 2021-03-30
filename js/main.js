@@ -1,7 +1,7 @@
 import { showFilteredPhotos, showPhotosFilter } from './show-photos.js';
 import { uploadPhoto } from './upload-photo.js';
 import { fetchPhoto } from './fetch-photo.js';
-import { errorHandlerModal } from './notification/error-handler.js';
+import { showErrorFetchPhotos } from './notification/error-handler.js';
 
 fetchPhoto()
   .then(photos => {
@@ -10,5 +10,5 @@ fetchPhoto()
     showPhotosFilter();
   })
   .catch(() => {
-    errorHandlerModal();
+    showErrorFetchPhotos();
   })

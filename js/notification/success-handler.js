@@ -11,28 +11,30 @@ const showSuccessMessage = () => {
 
   const element = mainElement.querySelector('.success');
   clickOutside();
-  element.querySelector('.success__button').addEventListener('click', hideSuccessMessage);
-  document.addEventListener('keydown', onHideMessageEsc)
+  const successButton = element.querySelector('.success__button');
+  successButton.addEventListener('click', onSuccessButtonClick);
+  document.addEventListener('keydown', onDocumentKeydownEsc)
 }
 
 /**
  * Закрытие по кнопке Esc
  * @param evt - событие
  */
-const onHideMessageEsc = (evt) => {
+const onDocumentKeydownEsc = (evt) => {
   if (isEscEvent(evt)) {
-    hideSuccessMessage();
+    onSuccessButtonClick();
   }
 };
 
 /**
  * Скрыть модальное окно
  */
-const hideSuccessMessage = () => {
+const onSuccessButtonClick = () => {
   const element = mainElement.querySelector('.success');
-  destroyClickOutside(element, hideSuccessMessage);
-  element.querySelector('.success__button').removeEventListener('click', hideSuccessMessage)
-  document.removeEventListener('keydown', onHideMessageEsc)
+  destroyClickOutside(element, onSuccessButtonClick);
+  const successButton = element.querySelector('.success__button');
+  successButton.removeEventListener('click', onSuccessButtonClick)
+  document.removeEventListener('keydown', onDocumentKeydownEsc)
 
   mainElement.removeChild(element);
 }
@@ -43,7 +45,7 @@ const hideSuccessMessage = () => {
  */
 const onClickOutside = (e) => {
   if (!mainElement.querySelector('.success__inner').contains(e.target)) {
-    hideSuccessMessage();
+    onSuccessButtonClick();
   }
 }
 

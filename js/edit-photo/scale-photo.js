@@ -6,23 +6,23 @@ const STEP = 25;
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
 const scaleControlValue = document.querySelector('.scale__control--value');
-const imgUploadPreview = document.querySelector('.img-upload__preview');
+const imgUploadPreview = document.querySelector('.img-upload__preview img');
 
 /**
  * Изменить размер фотографии
  */
 const changeSizePhoto = () => {
   setDefaultScale();
-  scaleControlSmaller.addEventListener('click', onScaleControlSmaller);
-  scaleControlBigger.addEventListener('click', onScaleControlBigger);
+  scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
+  scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
 }
 
 /**
  * Удаление слушателя изменения размеры формы
  */
 const destroyChangeSizePhoto = () => {
-  scaleControlSmaller.removeEventListener('click', onScaleControlSmaller);
-  scaleControlBigger.removeEventListener('click', onScaleControlBigger);
+  scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
+  scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
 }
 
 /**
@@ -35,8 +35,8 @@ const setDefaultScale = () => {
 /**
  * Обработчик уменьшения размера фотографии
  */
-const onScaleControlSmaller = () => {
-  const scale = updateScale(percentageToNumber(scaleControlValue.value), false);
+const onScaleControlSmallerClick = () => {
+  const scale = updateScale(transformPercentageToNumber(scaleControlValue.value), false);
 
   scaleControlValue.value = getPercentage(scale);
   imgUploadPreview.style.transform = `scale(${scale / 100})`;
@@ -45,8 +45,8 @@ const onScaleControlSmaller = () => {
 /**
  * Обработчик увеличения размера фотографии
  */
-const onScaleControlBigger = () => {
-  const scale = updateScale(percentageToNumber(scaleControlValue.value), true);
+const onScaleControlBiggerClick = () => {
+  const scale = updateScale(transformPercentageToNumber(scaleControlValue.value), true);
 
   scaleControlValue.value = getPercentage(scale);
   imgUploadPreview.style.transform = `scale(${scale / 100})`;
@@ -89,7 +89,7 @@ const getPercentage = (value) => {
  * Преобразование процента в число
  * @param {string} percent - процент
  */
-const percentageToNumber = (percent) => {
+const transformPercentageToNumber = (percent) => {
   return Number(percent.replace('%', ''));
 }
 

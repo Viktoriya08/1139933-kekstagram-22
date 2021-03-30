@@ -9,6 +9,10 @@ const photosContainer = document.querySelector('.pictures');
 const userPhotoTemplate = document.querySelector('#picture').content;
 const userPhotoFragment = document.createDocumentFragment();
 const filterFormControls = document.querySelector('.img-filters__form');
+const imageFilterButtonsGroup = document.querySelector('.img-filters');
+const defaultControl = document.querySelector('#filter-default');
+const randomControl = document.querySelector('#filter-random');
+const discussedControl = document.querySelector('#filter-discussed');
 
 /**
  * Функция отрисовки фотографий
@@ -35,11 +39,6 @@ const appendPhotos = (photos) => {
  */
 const showFilteredPhotos = (photos) => {
   appendPhotos(photos);
-
-  const defaultControl = document.querySelector('#filter-default');
-  const randomControl = document.querySelector('#filter-random');
-  const discussedControl = document.querySelector('#filter-discussed');
-
   filterFormControls.addEventListener('click', _.debounce((e) => {
     toggleActiveFilterControl(e);
     clearPhotos();
@@ -102,7 +101,7 @@ const clearPhotos = () => {
  * Показать фильтр фотографий
  */
 const showPhotosFilter = () => {
-  document.querySelector('.img-filters').classList.remove('img-filters--inactive');
+  imageFilterButtonsGroup.classList.remove('img-filters--inactive');
 }
 
 export { showPhotosFilter, showFilteredPhotos };

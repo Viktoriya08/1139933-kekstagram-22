@@ -7,7 +7,9 @@ import { showSuccessMessage } from './notification/success-handler.js';
 import { showErrorMessage } from './notification/error-handler.js';
 
 const uploadInput = document.querySelector('#upload-file');
-const upLoadCancel = document.querySelector('#upload-cancel');
+const uploadCancel = document.querySelector('#upload-cancel');
+const imageUploadOverlay = document.querySelector('.img-upload__overlay');
+const body = document.querySelector('body');
 
 /**
  * Загрузка фото
@@ -22,8 +24,8 @@ const uploadPhoto = () => {
     validateForm();
     sendPhoto();
 
-    document.addEventListener('keydown', onUploadPhotoEscKeydown);
-    upLoadCancel.addEventListener('click', closeUploadPhoto);
+    document.addEventListener('keydown', onDocumentKeydownEsc);
+    uploadCancel.addEventListener('click', onUploadCancelClick);
   })
 };
 
@@ -31,17 +33,17 @@ const uploadPhoto = () => {
  * Показать загрузчик фото
  */
 const showImgUploadOverlay = () => {
-  document.querySelector('.img-upload__overlay').classList.remove('hidden');
-  document.querySelector('body').classList.add('modal-open');
+  imageUploadOverlay.classList.remove('hidden');
+  body.classList.add('modal-open');
 }
 
 /**
  * Обработчик закрытия модального окна по клавише Esc
  * @param {event} evt - событие
  */
-const onUploadPhotoEscKeydown = (evt) => {
+const onDocumentKeydownEsc = (evt) => {
   if (isEscEvent(evt) && !evt.target.classList.contains('text__hashtags') && !evt.target.classList.contains('text__description')) {
-    closeUploadPhoto();
+    onUploadCancelClick();
   }
 };
 
@@ -49,14 +51,14 @@ const onUploadPhotoEscKeydown = (evt) => {
  * Скрыть загрузчик фото
  */
 const hideImgUploadOverlay = () => {
-  document.querySelector('.img-upload__overlay').classList.add('hidden');
-  document.querySelector('body').classList.remove('modal-open');
+  imageUploadOverlay.classList.add('hidden');
+  body.classList.remove('modal-open');
 }
 
 /**
  * Функция закрытия окна редактирования фото
  */
-const closeUploadPhoto = () => {
+const onUploadCancelClick = () => {
   hideImgUploadOverlay();
   clearEffectValue();
   clearEffect();
@@ -71,8 +73,8 @@ const closeUploadPhoto = () => {
  * Удаление eventListener
  */
 const destroyUploadPhoto = () => {
-  document.removeEventListener('keydown', onUploadPhotoEscKeydown);
-  upLoadCancel.removeEventListener('click', closeUploadPhoto);
+  document.removeEventListener('keydown', onDocumentKeydownEsc);
+  uploadCancel.removeEventListener('click', onUploadCancelClick);
 
   destroyChangeSizePhoto();
   destroyChangeEffect();
@@ -89,22 +91,22 @@ const clearUploadInput = () => {
 }
 
 // ===== отправка фото
-const sendPhotoForm = document.querySelector('#upload-select-image');
+const photoForm = document.querySelector('#upload-select-image');
 
 /**
  * Событие отправки формы с фото
  * @param e - событие
  */
-const onSubmitEvent = (e) => {
+const onPhotoFormSubmit = (e) => {
   e.preventDefault();
-  const data = new FormData(document.querySelector('#upload-select-image'));
+  const data = new FormData(photoForm);
   postPhoto(data)
     .then(() => {
-      closeUploadPhoto();
+      onUploadCancelClick();
       showSuccessMessage();
     })
     .catch(() => {
-      closeUploadPhoto();
+      onUploadCancelClick();
       showErrorMessage();
     });
 };
@@ -113,14 +115,14 @@ const onSubmitEvent = (e) => {
  * Отправка фотографии
  */
 const sendPhoto = () => {
-  sendPhotoForm.addEventListener('submit', onSubmitEvent);
+  photoForm.addEventListener('submit', onPhotoFormSubmit);
 }
 
 /**
  * Отписка от слушателя отправки фотографии
  */
 const destroySendPhoto = () => {
-  sendPhotoForm.removeEventListener('submit', onSubmitEvent)
+  photoForm.removeEventListener('submit', onPhotoFormSubmit)
 }
 
 export {uploadPhoto};

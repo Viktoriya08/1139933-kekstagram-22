@@ -1,3 +1,5 @@
+const DEFAULT_START_VALUE_SLIDER = 100;
+
 const EMPTY_EFFECT = 'none';
 const CHROME_EFFECT = 'chrome';
 const SEPIA_EFFECT = 'sepia';
@@ -5,29 +7,96 @@ const MARVIN_EFFECT = 'marvin';
 const PHOBOS_EFFECT = 'phobos';
 const HEAT_EFFECT = 'heat';
 
+/**
+ * Параметры слайдера для эффекта CHROME
+ */
+const SLIDER_OPTION_FOR_CHROME_EFFECT = {
+  range: {
+    min: 0,
+    max: 1,
+  },
+  step: 0.1,
+};
+
+/**
+ * Параметры слайдера для эффекта SEPIA
+ */
+const SLIDER_OPTION_FOR_SEPIA_EFFECT = {
+  range: {
+    min: 0,
+    max: 1,
+  },
+  step: 0.1,
+};
+
+/**
+ * Параметры слайдера для эффекта MARVIN
+ */
+const SLIDER_OPTION_FOR_MARVIN_EFFECT = {
+  range: {
+    min: 0,
+    max: 100,
+  },
+  step: 1,
+};
+
+/**
+ * Параметры слайдера для эффекта PHOBOS
+ */
+const SLIDER_OPTION_FOR_PHOBOS_EFFECT = {
+  range: {
+    min: 0,
+    max: 3,
+  },
+  step: 0.1,
+};
+
+/**
+ * Параметры слайдера для эффекта HEAT
+ */
+const SLIDER_OPTION_FOR_HEAT_EFFECT = {
+  range: {
+    min: 1,
+    max: 3,
+  },
+  step: 0.1,
+};
+
+/**
+ * Параметры слайдера по умолчанию
+ */
+const SLIDER_OPTION_DEFAULT = {
+  range: {
+    min: 0,
+    max: 100,
+  },
+  step: 1,
+};
+
 const photoElement = document.querySelector('.img-upload__preview img');
-const radioButtons = document.querySelector('.effects__list');
+const radioButtonsGroup = document.querySelector('.effects__list');
 const sliderElement = document.querySelector('.effect-level__slider');
+const effectLevelBack = document.querySelector('.img-upload__effect-level');
 
 /**
  * Изменить эффект фото
  */
 const changeEffect = () => {
-  radioButtons.addEventListener('change', onChangeEffect);
+  radioButtonsGroup.addEventListener('change', onRadioButtonsGroupChange);
 }
 
 /**
  * Удаление слушателя изменения эффекта
  */
 const destroyChangeEffect = () => {
-  radioButtons.removeEventListener('change', onChangeEffect);
+  radioButtonsGroup.removeEventListener('change', onRadioButtonsGroupChange);
 }
 
 /**
  * Событие изменения эффекта
  * @param evt - событие
  */
-const onChangeEffect = (evt) => {
+const onRadioButtonsGroupChange = (evt) => {
   changeEffectValue();
   clearEffectValue();
   photoElement.className = `effects__preview--${evt.target.value}`;
@@ -41,9 +110,9 @@ const toggleEffectLevelBackBySelectedEffect = () => {
   const selectedEffect = document.querySelector('input[name=effect]:checked').value;
 
   if (selectedEffect === EMPTY_EFFECT) {
-    document.querySelector('.img-upload__effect-level').classList.add('hidden');
+    effectLevelBack.classList.add('hidden');
   } else {
-    document.querySelector('.img-upload__effect-level').classList.remove('hidden')
+    effectLevelBack.classList.remove('hidden')
   }
 }
 
@@ -66,8 +135,7 @@ const changeEffectValue = () => {
  * Очистить значение эффекта
  */
 const clearEffectValue = () => {
-  const photoElement = document.querySelector('.img-upload__preview img');
-  photoElement.style = '';
+  photoElement.style.filter = '';
 }
 
 /**
@@ -123,10 +191,8 @@ const setPhobosEffect = (value) => {
 }
 
 const setHeatEffect = (value) => {
-  const photoElement = document.querySelector('.img-upload__preview img');
   photoElement.style.filter = `brightness(${value})`;
 }
-
 
 /**
  * Зарегистрировать слайдер
@@ -137,7 +203,7 @@ const registryUiSlider = (element) => {
 
   // eslint-disable-next-line no-undef
   noUiSlider.create(element, {
-    start: 100,
+    start: DEFAULT_START_VALUE_SLIDER,
     ...getSliderOptionsByEffectType(selectedEffect),
   });
 }
@@ -158,97 +224,18 @@ const destroyUISlider = () => {
 const getSliderOptionsByEffectType = (type) => {
   switch (type) {
     case CHROME_EFFECT:
-      return sliderOptionForChromeEffect();
+      return SLIDER_OPTION_FOR_CHROME_EFFECT;
     case SEPIA_EFFECT:
-      return sliderOptionForSepiaEffect();
+      return SLIDER_OPTION_FOR_SEPIA_EFFECT;
     case MARVIN_EFFECT:
-      return sliderOptionForMarvinEffect();
+      return SLIDER_OPTION_FOR_MARVIN_EFFECT;
     case PHOBOS_EFFECT:
-      return sliderOptionForPhobosEffect();
+      return SLIDER_OPTION_FOR_PHOBOS_EFFECT;
     case HEAT_EFFECT:
-      return sliderOptionForHeatEffect();
+      return SLIDER_OPTION_FOR_HEAT_EFFECT;
     default:
-      return sliderOptionDefault();
+      return SLIDER_OPTION_DEFAULT;
   }
 }
 
-/**
- * Параметры слайдера для эффекта CHROME
- */
-const sliderOptionForChromeEffect = () => {
-  return {
-    range: {
-      min: 0,
-      max: 1,
-    },
-    step: 0.1,
-  }
-}
-
-/**
- * Параметры слайдера для эффекта SEPIA
- */
-const sliderOptionForSepiaEffect = () => {
-  return {
-    range: {
-      min: 0,
-      max: 1,
-    },
-    step: 0.1,
-  }
-}
-
-/**
- * Параметры слайдера для эффекта MARVIN
- */
-const sliderOptionForMarvinEffect = () => {
-  return {
-    range: {
-      min: 0,
-      max: 100,
-    },
-    step: 1,
-  }
-}
-
-/**
- * Параметры слайдера для эффекта PHOBOS
- */
-const sliderOptionForPhobosEffect = () => {
-  return {
-    range: {
-      min: 0,
-      max: 3,
-    },
-    step: 0.1,
-  }
-}
-
-/**
- * Параметры слайдера для эффекта HEAT
- */
-const sliderOptionForHeatEffect = () => {
-  return {
-    range: {
-      min: 1,
-      max: 3,
-    },
-    step: 0.1,
-  }
-}
-
-/**
- * Параметры слайдера по умолчанию
- */
-const sliderOptionDefault = () => {
-  return {
-    range: {
-      min: 0,
-      max: 100,
-    },
-    step: 1,
-  }
-}
-
-
-export { changeEffect, clearEffectValue, radioButtons, destroyChangeEffect, destroyUISlider, clearEffect, toggleEffectLevelBackBySelectedEffect }
+export { changeEffect, clearEffectValue, destroyChangeEffect, destroyUISlider, clearEffect, toggleEffectLevelBackBySelectedEffect }

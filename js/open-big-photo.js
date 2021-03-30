@@ -9,8 +9,11 @@ const bigPhotoClose = bigPhotoContainer.querySelector('.big-picture__cancel');
 const commentsCount = document.querySelector('.comments-count');
 const commentsCurrentCount = document.querySelector('.comments-current-count');
 const loadMoreCommentButton = document.querySelector('.comments-loader');
+const photoElement = document.querySelector('.big-picture__img img');
+const likesElement = document.querySelector('.likes-count');
+const descriptionElement = document.querySelector('.social__caption');
 
-const onPopupEscKeydown = (evt) => {
+const onDocumentKeydownEsc = (evt) => {
   if (isEscEvent(evt)) {
     closeBigPhoto();
   }
@@ -25,7 +28,7 @@ const onPopupEscKeydown = (evt) => {
 const openBigPhoto = (url, comments, likes, description) => {
   bigPhotoContainer.classList.remove('hidden');
 
-  document.addEventListener('keydown', onPopupEscKeydown);
+  document.addEventListener('keydown', onDocumentKeydownEsc);
 
   bigPhotoClose.addEventListener('click', () => {
     closeBigPhoto();
@@ -36,9 +39,6 @@ const openBigPhoto = (url, comments, likes, description) => {
       closeBigPhoto();
     }
   });
-  const photoElement = document.querySelector('.big-picture__img img');
-  const likesElement = document.querySelector('.likes-count');
-  const descriptionElement = document.querySelector('.social__caption');
 
   commentHandler(comments);
 
@@ -52,7 +52,7 @@ const openBigPhoto = (url, comments, likes, description) => {
 /**
  * Callback показа комментариев
  */
-const onShowComments = () => {
+const onLoadMoreCommentButtonClick = () => {
   let count = 0;
   const comments = Array.from(document.querySelectorAll('.social__comment'));
 
@@ -84,7 +84,9 @@ const commentHandler = (comments) => {
 
   if (comments.length > DEFAULT_SHOWED_COMMENTS) {
     showLoadMoreCommentButton();
-    loadMoreCommentButton.addEventListener('click', onShowComments);
+    loadMoreCommentButton.addEventListener('click', onLoadMoreCommentButtonClick);
+  } else {
+    hideLoadMoreCommentButton();
   }
 }
 
@@ -92,7 +94,7 @@ const commentHandler = (comments) => {
  * Отписка от загрузки комментариев
  */
 const destroyCommentLoadMore = () => {
-  loadMoreCommentButton.removeEventListener('click', onShowComments);
+  loadMoreCommentButton.removeEventListener('click', onLoadMoreCommentButtonClick);
 }
 
 /**
@@ -115,15 +117,15 @@ const hideLoadMoreCommentButton = () => {
 const closeBigPhoto = () => {
   bigPhotoContainer.classList.add('hidden');
   destroyCommentLoadMore();
-  document.removeEventListener('keydown', onPopupEscKeydown);
+  document.removeEventListener('keydown', onDocumentKeydownEsc);
   document.querySelector('body').classList.remove('modal-open');
 };
 
 /**
  * Функция генерации комментариев
- * @param
+ * @param comments - список комментариев
+ * @param commentsContainer - контейнер для вставки комментариев
  */
-
 const showComment = (comments, commentsContainer) => {
   commentsContainer.innerHTML = '';
   const userCommentTemplate = document.querySelector('#social__comments').content;

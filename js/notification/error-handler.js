@@ -3,10 +3,13 @@ import { isEscEvent } from '../util.js';
 const errorTemplate = document.querySelector('#error').content;
 const mainElement = document.querySelector('main');
 
-const momalErrorAllUpload = document.querySelector('.error-allupload');
+const modalErrorAllUpload = document.querySelector('.error-allupload');
 
-const errorHandlerModal = () => {
-  momalErrorAllUpload.classList.remove('hidden');
+/**
+ * Показать сообщение об ошибке загрузке всех фотографий
+ */
+const showErrorFetchPhotos = () => {
+  modalErrorAllUpload.classList.remove('hidden');
 }
 
 /**
@@ -16,29 +19,31 @@ const showErrorMessage = () => {
   mainElement.appendChild(errorTemplate.cloneNode(true));
 
   const element = mainElement.querySelector('.error');
-  clickOutside(element, hideErrorMessage);
-  element.querySelector('.error__button').addEventListener('click', hideErrorMessage);
-  document.addEventListener('keydown', onHideMessageEsc)
+  clickOutside(element, onErrorButtonClick);
+  const errorButton = element.querySelector('.error__button');
+  errorButton.addEventListener('click', onErrorButtonClick);
+  document.addEventListener('keydown', onDocumentKeydownEsc)
 }
 
 /**
  * Закрытие по кнопке Esc
  * @param evt - событие
  */
-const onHideMessageEsc = (evt) => {
+const onDocumentKeydownEsc = (evt) => {
   if (isEscEvent(evt)) {
-    hideErrorMessage();
+    onErrorButtonClick();
   }
 };
 
 /**
  * Скрыть модальное окно
  */
-const hideErrorMessage = () => {
+const onErrorButtonClick = () => {
   const element = mainElement.querySelector('.error');
   destroyClickOutside();
-  element.querySelector('.error__button').removeEventListener('click', hideErrorMessage)
-  document.removeEventListener('keydown', onHideMessageEsc)
+  const errorButton = element.querySelector('.error__button');
+  errorButton.removeEventListener('click', onErrorButtonClick)
+  document.removeEventListener('keydown', onDocumentKeydownEsc)
 
   mainElement.removeChild(element);
 }
@@ -49,7 +54,7 @@ const hideErrorMessage = () => {
  */
 const onClickOutside = (e) => {
   if (!mainElement.querySelector('.error__inner').contains(e.target)) {
-    hideErrorMessage();
+    onErrorButtonClick();
   }
 }
 
@@ -67,4 +72,4 @@ const destroyClickOutside = () => {
   document.removeEventListener('click', onClickOutside)
 }
 
-export {errorHandlerModal, showErrorMessage};
+export {showErrorFetchPhotos, showErrorMessage};
